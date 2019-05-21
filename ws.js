@@ -1,7 +1,40 @@
+/*
 var WebSocketServer = require("ws").Server,
 wss = new WebSocketServer({port:8888}),
 users={};
+*/
+var WebSocketServer = require("ws").Server;
 
+
+const fs = require('fs');
+const https = require('https');
+//const enforceHttps = require('koa-sslify');
+
+// var options = {
+//     key: fs.readFileSync('./ssl/private_key.pem'),
+//     cert: fs.readFileSync('./ssl/ca-cert.pem')
+// };
+
+// 创建request请求监听器
+const processRequest = (req, res) => {
+    res.writeHead(200);
+    res.end('厉害了，我的WebSockets!\n');
+};
+ 
+const app = https.createServer({
+    // 向server传递key和cert参数
+    key: fs.readFileSync('./ssl/private_key.pem'),
+    cert: fs.readFileSync('./ssl/ca-cert.pem')
+}, processRequest).listen(8888);
+ 
+// 实例化WebSocket服务器
+const wss = new WebSocketServer({
+    server: app
+});
+// 如果有WebSocket请求接入，wss对象可
+
+//wss = new WebSocketServer({port:8888}),
+users={};
 
 wss.on("connection",function(connection){
 	console.log("OK~you're connected!")
