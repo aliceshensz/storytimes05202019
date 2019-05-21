@@ -138,7 +138,8 @@ var loginPage = document.querySelector('#login-page'),
 				audio:false
 			},function(myStream){
 				stream = myStream;
-				yourVideo.src = window.URL.createObjectURL(stream);
+				//yourVideo.src = window.URL.createObjectURL(stream);
+				yourVideo.srcObject=stream;
 				if(hasRTCPeerConnection()){
 					setupPeerConnection(stream)
 				}else{
@@ -146,6 +147,8 @@ var loginPage = document.querySelector('#login-page'),
 				}
 			},function(error){
 				console.log(error);
+				alert("here!welldone.ted，but no streaming! Erroring......!");
+				setupPeerConnection(null)//没有摄像头的客户端
 			});
 		}else{
 			alert("Sorry,your browser does not support WebRTC.")
@@ -161,9 +164,12 @@ var loginPage = document.querySelector('#login-page'),
 		yourConnection = new RTCPeerConnection(configuration);
 
 		//设置流的监听
-		yourConnection.addStream(stream);
+		if(!!stream){
+			yourConnection.addStream(stream);
+		}
 		yourConnection.onaddstream=function(e){
-			theirVideo.src = window.URL.createObjectURL(e.stream);
+			//theirVideo.src = window.URL.createObjectURL(e.stream);
+			theirVideo.srcObject=e.stream
 		}
 
 		//设置ice处理事件
