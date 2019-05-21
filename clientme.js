@@ -158,7 +158,7 @@ var loginPage = document.querySelector('#login-page'),
 				"url":"stun:stun.1.google.com:19302"
 			}]
 		}
-		yourConnection = new RTC(configuration);
+		yourConnection = new RTCPeerConnection(configuration);
 
 		//设置流的监听
 		yourConnection.addStream(stream);
